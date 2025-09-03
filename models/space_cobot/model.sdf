@@ -1,0 +1,642 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<sdf version='1.9'>
+  <model name='space_cobot'>
+    <self_collide>false</self_collide>
+    <static>false</static>
+    <link name='base_link'>
+      <velocity_decay>
+        <linear>0</linear>
+        <angular>0</angular>
+      </velocity_decay>
+      <pose>0 0 0 0 -0 0</pose>
+      <inertial>
+        <pose>0 0 0 0 -0 0</pose>
+        <mass>3.4</mass>
+        <inertia>
+          <ixx>0.085225</ixx>
+          <ixy>0</ixy>
+          <ixz>0</ixz>
+          <iyy>0.085225</iyy>
+          <iyz>0</iyz>
+          <izz>0.085225</izz>
+        </inertia>
+      </inertial>
+      <visual name='base_link_inertia_visual'>
+        <pose>0.0 0.0 0.0 0.0 0.0 -0.523598</pose>
+        <geometry>
+          <mesh>
+            <scale>1.0 1.0 1.0</scale>
+            <uri>model://space_cobot/meshes/cobot.dae</uri>
+          </mesh>
+        </geometry>
+        <material>
+          <script>
+            <name>Gazebo/Black</name>
+            <uri>file://media/materials/scripts/gazebo.material</uri>
+          </script>
+        </material>
+      </visual>
+      <gravity>0</gravity>
+      <sensor name="air_pressure_sensor" type="air_pressure">
+        <always_on>1</always_on>
+        <update_rate>50</update_rate>
+        <air_pressure>
+          <pressure>
+            <noise type="gaussian">
+              <mean>0</mean>
+              <stddev>0.01</stddev>
+            </noise>
+          </pressure>
+        </air_pressure>
+      </sensor>
+      <sensor name="imu_sensor" type="imu">
+        <always_on>1</always_on>
+        <update_rate>250</update_rate>
+        <imu>
+          <angular_velocity>
+            <x>
+              <noise type="gaussian">
+                <mean>0</mean>
+                <stddev>0.00018665</stddev>
+                <dynamic_bias_stddev>3.8785e-05</dynamic_bias_stddev>
+                <dynamic_bias_correlation_time>1000</dynamic_bias_correlation_time>
+              </noise>
+            </x>
+            <y>
+              <noise type="gaussian">
+                <mean>0</mean>
+                <stddev>0.00018665</stddev>
+                <dynamic_bias_stddev>3.8785e-05</dynamic_bias_stddev>
+                <dynamic_bias_correlation_time>1000</dynamic_bias_correlation_time>
+              </noise>
+            </y>
+            <z>
+              <noise type="gaussian">
+                <mean>0</mean>
+                <stddev>0.00018665</stddev>
+                <dynamic_bias_stddev>3.8785e-05</dynamic_bias_stddev>
+                <dynamic_bias_correlation_time>1000</dynamic_bias_correlation_time>
+              </noise>
+            </z>
+          </angular_velocity>
+          <linear_acceleration>
+            <x>
+              <noise type="gaussian">
+                <mean>0</mean>
+                <stddev>0.00186</stddev>
+                <dynamic_bias_stddev>0.006</dynamic_bias_stddev>
+                <dynamic_bias_correlation_time>300</dynamic_bias_correlation_time>
+              </noise>
+            </x>
+            <y>
+              <noise type="gaussian">
+                <mean>0</mean>
+                <stddev>0.00186</stddev>
+                <dynamic_bias_stddev>0.006</dynamic_bias_stddev>
+                <dynamic_bias_correlation_time>300</dynamic_bias_correlation_time>
+              </noise>
+            </y>
+            <z>
+              <noise type="gaussian">
+                <mean>0</mean>
+                <stddev>0.00186</stddev>
+                <dynamic_bias_stddev>0.006</dynamic_bias_stddev>
+                <dynamic_bias_correlation_time>300</dynamic_bias_correlation_time>
+              </noise>
+            </z>
+          </linear_acceleration>
+        </imu>
+      </sensor>
+      <sensor name="navsat_sensor" type="navsat">
+        <always_on>1</always_on>
+        <update_rate>30</update_rate>
+      </sensor>
+    </link>
+
+    <!-- Rotor 0 and Rotor 3 form a pair -->
+    <link name='rotor_0'>
+      <pose>-0.1655 0.0 0.0 0.0 -0.610865  1.570796 </pose>
+      <inertial>
+        <pose>0 0 0 0 -0 0</pose>
+        <mass>0.005</mass>
+        <inertia>
+          <ixx>9.75e-07</ixx>
+          <ixy>0</ixy>
+          <ixz>0</ixz>
+          <iyy>0.000273104</iyy>
+          <iyz>0</iyz>
+          <izz>0.000274004</izz>
+        </inertia>
+      </inertial>
+      <collision name='rotor_0_collision'>
+        <pose>0 0 0 0 -0 0</pose>
+        <geometry>
+          <cylinder>
+            <length>0.005</length>
+            <radius>0.064</radius>
+          </cylinder>
+        </geometry>
+        <surface>
+          <contact>
+            <ode/>
+          </contact>
+        </surface>
+      </collision>
+      <visual name='rotor_0_visual'>
+        <pose>0 0 0 0 -0 0</pose>
+        <geometry>
+          <mesh>
+            <scale>0.45 0.45 0.45</scale>
+            <uri>model://omnicopter/meshes/iris_prop_ccw.dae</uri>
+          </mesh>
+        </geometry>
+        <material>
+          <script>
+            <name>Gazebo/Blue</name>
+            <uri>file://media/materials/scripts/gazebo.material</uri>
+          </script>
+        </material>
+      </visual>
+      <gravity>false</gravity>
+      <velocity_decay>
+        <linear>0</linear>
+        <angular>0</angular>
+      </velocity_decay>
+    </link>
+    <joint name='rotor_0_joint' type='revolute'>
+      <child>rotor_0</child>
+      <parent>base_link</parent>
+      <axis>
+        <xyz>0 0 1</xyz>
+        <limit>
+          <lower>-1e+16</lower>
+          <upper>1e+16</upper>
+        </limit>
+        <dynamics>
+          <damping>0</damping>
+          <spring_reference>0</spring_reference>
+          <spring_stiffness>0</spring_stiffness>
+        </dynamics>
+      </axis>
+    </joint>
+    <plugin filename="gz-sim-reversible-multicopter-motor-model-system" name="gz::sim::systems::ReversibleMulticopterMotorModel">
+      <jointName>rotor_0_joint</jointName>
+      <linkName>rotor_0</linkName>
+
+      <robotName>space_cobot_0</robotName>
+      <commandSubTopic>motor_command</commandSubTopic>
+
+      <a0ThrustConstant>2.123e-17 </a0ThrustConstant>
+      <a1ThrustConstant>2.598e-04 </a1ThrustConstant>
+      <a2ThrustConstant>0.0 </a2ThrustConstant>
+      <a3ThrustConstant>1.112e-10 </a3ThrustConstant>
+
+      <a0TorqueConstant>1.919e-19 </a0TorqueConstant>
+      <a1TorqueConstant>7.019e-06 </a1TorqueConstant>
+      <a2TorqueConstant>0.0 </a2TorqueConstant>
+      <a3TorqueConstant>-3.425e-12 </a3TorqueConstant>
+
+      <motorNumber>0</motorNumber>
+      <motorType>velocity</motorType>
+    </plugin>
+    <link name='rotor_3'>
+      <pose>0.1655 0.0 0.0 0.0 0.610865 -1.570796</pose>
+      <inertial>
+        <pose>0 0 0 0 -0 0</pose>
+        <mass>0.005</mass>
+        <inertia>
+          <ixx>9.75e-07</ixx>
+          <ixy>0</ixy>
+          <ixz>0</ixz>
+          <iyy>0.000273104</iyy>
+          <iyz>0</iyz>
+          <izz>0.000274004</izz>
+        </inertia>
+      </inertial>
+      <collision name='rotor_3_collision'>
+        <pose>0 0 0 0 -0 0</pose>
+        <geometry>
+          <cylinder>
+            <length>0.005</length>
+            <radius>0.064</radius>
+          </cylinder>
+        </geometry>
+        <surface>
+          <contact>
+            <ode/>
+          </contact>
+        </surface>
+      </collision>
+      <visual name='rotor_3_visual'>
+        <pose>0 0 0 0 -0 0</pose>
+        <geometry>
+          <mesh>
+            <scale>0.45 0.45 0.45</scale>
+            <uri>model://omnicopter/meshes/iris_prop_ccw.dae</uri>
+          </mesh>
+        </geometry>
+        <material>
+          <script>
+            <name>Gazebo/Blue</name>
+            <uri>file://media/materials/scripts/gazebo.material</uri>
+          </script>
+        </material>
+      </visual>
+      <gravity>0</gravity>
+      <velocity_decay>
+        <linear>0</linear>
+        <angular>0</angular>
+      </velocity_decay>
+    </link>
+    <joint name='rotor_3_joint' type='revolute'>
+      <child>rotor_3</child>
+      <parent>base_link</parent>
+      <axis>
+        <xyz>0 0 1</xyz>
+        <limit>
+          <lower>-1e+16</lower>
+          <upper>1e+16</upper>
+        </limit>
+        <dynamics>
+          <damping>0</damping>
+          <spring_reference>0</spring_reference>
+          <spring_stiffness>0</spring_stiffness>
+        </dynamics>
+      </axis>
+    </joint>
+    <plugin filename="gz-sim-reversible-multicopter-motor-model-system" name="gz::sim::systems::ReversibleMulticopterMotorModel">
+      <jointName>rotor_3_joint</jointName>
+      <linkName>rotor_3</linkName>
+
+      <robotName>space_cobot_0</robotName>
+      <commandSubTopic>motor_command</commandSubTopic>
+
+      <a0ThrustConstant>2.123e-17 </a0ThrustConstant>
+      <a1ThrustConstant>2.598e-04 </a1ThrustConstant>
+      <a2ThrustConstant>0.0 </a2ThrustConstant>
+      <a3ThrustConstant>1.112e-10 </a3ThrustConstant>
+
+      <a0TorqueConstant>-1.919e-19 </a0TorqueConstant>
+      <a1TorqueConstant>-7.019e-06 </a1TorqueConstant>
+      <a2TorqueConstant>0.0 </a2TorqueConstant>
+      <a3TorqueConstant>3.425e-12 </a3TorqueConstant>
+
+      <motorNumber>3</motorNumber>
+      <motorType>velocity</motorType>
+    </plugin>
+
+    <!-- Rotor 1 and Rotor 5 form a pair -->
+    <link name='rotor_1'>
+      <pose>-0.0827 0.1433 0.0 0.0 0.610865 0.523598</pose>
+      <inertial>
+        <pose>0 0 0 0 -0 0</pose>
+        <mass>0.005</mass>
+        <inertia>
+          <ixx>9.75e-07</ixx>
+          <ixy>0</ixy>
+          <ixz>0</ixz>
+          <iyy>0.000273104</iyy>
+          <iyz>0</iyz>
+          <izz>0.000274004</izz>
+        </inertia>
+      </inertial>
+      <collision name='rotor_1_collision'>
+        <pose>0 0 0 0 -0 0</pose>
+        <geometry>
+          <cylinder>
+            <length>0.005</length>
+            <radius>0.064</radius>
+          </cylinder>
+        </geometry>
+        <surface>
+          <contact>
+            <ode/>
+          </contact>
+        </surface>
+      </collision>
+      <visual name='rotor_1_visual'>
+        <pose>0 0 0 0 -0 0</pose>
+        <geometry>
+          <mesh>
+            <scale>0.45 0.45 0.45</scale>
+            <uri>model://omnicopter/meshes/iris_prop_ccw.dae</uri>
+          </mesh>
+        </geometry>
+        <material>
+          <script>
+            <name>Gazebo/Green</name>
+            <uri>file://media/materials/scripts/gazebo.material</uri>
+          </script>
+        </material>
+      </visual>
+      <gravity>0</gravity>
+      <velocity_decay>
+        <linear>0</linear>
+        <angular>0</angular>
+      </velocity_decay>
+    </link>
+    <joint name='rotor_1_joint' type='revolute'>
+      <child>rotor_1</child>
+      <parent>base_link</parent>
+      <axis>
+        <xyz> 0 0 1</xyz>
+        <limit>
+          <lower>-1e+16</lower>
+          <upper>1e+16</upper>
+        </limit>
+        <dynamics>
+          <damping>0</damping>
+          <spring_reference>0</spring_reference>
+          <spring_stiffness>0</spring_stiffness>
+        </dynamics>
+      </axis>
+    </joint>
+    <plugin filename="gz-sim-reversible-multicopter-motor-model-system" name="gz::sim::systems::ReversibleMulticopterMotorModel">
+      <jointName>rotor_1_joint</jointName>
+      <linkName>rotor_1</linkName>
+
+      <robotName>space_cobot_0</robotName>
+      <commandSubTopic>motor_command</commandSubTopic>
+
+      <a0ThrustConstant>2.123e-17 </a0ThrustConstant>
+      <a1ThrustConstant>2.598e-04 </a1ThrustConstant>
+      <a2ThrustConstant>0.0 </a2ThrustConstant>
+      <a3ThrustConstant>1.112e-10 </a3ThrustConstant>
+
+      <a0TorqueConstant>-1.919e-19 </a0TorqueConstant>
+      <a1TorqueConstant>-7.019e-06 </a1TorqueConstant>
+      <a2TorqueConstant>0.0 </a2TorqueConstant>
+      <a3TorqueConstant>3.425e-12 </a3TorqueConstant>
+
+      <motorNumber>1</motorNumber>
+      <motorType>velocity</motorType>
+    </plugin>
+    <link name='rotor_4'>
+      <pose> 0.0827 -0.1433 0.0 0.0 -0.610865 -2.617993</pose>
+      <inertial>
+        <pose>0 0 0 0 -0 0</pose>
+        <mass>0.005</mass>
+        <inertia>
+          <ixx>9.75e-07</ixx>
+          <ixy>0</ixy>
+          <ixz>0</ixz>
+          <iyy>0.000273104</iyy>
+          <iyz>0</iyz>
+          <izz>0.000274004</izz>
+        </inertia>
+      </inertial>
+      <collision name='rotor_4_collision'>
+        <pose>0 0 0 0 -0 0</pose>
+        <geometry>
+          <cylinder>
+            <length>0.005</length>
+            <radius>0.064</radius>
+          </cylinder>
+        </geometry>
+        <surface>
+          <contact>
+            <ode/>
+          </contact>
+        </surface>
+      </collision>
+      <visual name='rotor_4_visual'>
+        <pose>0 0 0 0 -0 0</pose>
+        <geometry>
+          <mesh>
+            <scale>0.45 0.45 0.45</scale>
+            <uri>model://omnicopter/meshes/iris_prop_ccw.dae</uri>
+          </mesh>
+        </geometry>
+        <material>
+          <script>
+            <name>Gazebo/Green</name>
+            <uri>file://media/materials/scripts/gazebo.material</uri>
+          </script>
+        </material>
+      </visual>
+      <gravity>0</gravity>
+      <velocity_decay>
+        <linear>0</linear>
+        <angular>0</angular>
+      </velocity_decay>
+    </link>
+    <joint name='rotor_4_joint' type='revolute'>
+      <child>rotor_4</child>
+      <parent>base_link</parent>
+      <axis>
+        <xyz> 0 0 1</xyz>
+        <limit>
+          <lower>-1e+16</lower>
+          <upper>1e+16</upper>
+        </limit>
+        <dynamics>
+          <damping>0</damping>
+          <spring_reference>0</spring_reference>
+          <spring_stiffness>0</spring_stiffness>
+        </dynamics>
+      </axis>
+    </joint>
+    <plugin filename="gz-sim-reversible-multicopter-motor-model-system" name="gz::sim::systems::ReversibleMulticopterMotorModel">
+      <jointName>rotor_4_joint</jointName>
+      <linkName>rotor_4</linkName>
+
+      <robotName>space_cobot_0</robotName>
+      <commandSubTopic>motor_command</commandSubTopic>
+
+      <a0ThrustConstant>2.123e-17 </a0ThrustConstant>
+      <a1ThrustConstant>2.598e-04 </a1ThrustConstant>
+      <a2ThrustConstant>0.0 </a2ThrustConstant>
+      <a3ThrustConstant>1.112e-10 </a3ThrustConstant>
+
+      <a0TorqueConstant>1.919e-19 </a0TorqueConstant>
+      <a1TorqueConstant>7.019e-06 </a1TorqueConstant>
+      <a2TorqueConstant>0.0 </a2TorqueConstant>
+      <a3TorqueConstant>-3.425e-12 </a3TorqueConstant>
+
+      <motorNumber>4</motorNumber>
+      <motorType>velocity</motorType>
+    </plugin>
+    <!-- Rotor 3 and Rotor 6 form a pair -->
+    <link name='rotor_2'>
+      <pose> 0.0827 0.1433 0.0 0.0 -0.610865 -0.523598</pose>
+      <inertial>
+        <pose>0 0 0 0 -0 0</pose>
+        <mass>0.005</mass>
+        <inertia>
+          <ixx>9.75e-07</ixx>
+          <ixy>0</ixy>
+          <ixz>0</ixz>
+          <iyy>0.000273104</iyy>
+          <iyz>0</iyz>
+          <izz>0.000274004</izz>
+        </inertia>
+      </inertial>
+      <collision name='rotor_2_collision'>
+        <pose>0 0 0 0 -0 0</pose>
+        <geometry>
+          <cylinder>
+            <length>0.005</length>
+            <radius>0.064</radius>
+          </cylinder>
+        </geometry>
+        <surface>
+          <contact>
+            <ode/>
+          </contact>
+        </surface>
+      </collision>
+      <visual name='rotor_2_visual'>
+        <pose>0 0 0 0 -0 0</pose>
+        <geometry>
+          <mesh>
+            <scale>0.45 0.45 0.45</scale>
+            <uri>model://omnicopter/meshes/iris_prop_ccw.dae</uri>
+          </mesh>
+        </geometry>
+        <material>
+          <script>
+            <name>Gazebo/Yellow</name>
+            <uri>file://media/materials/scripts/gazebo.material</uri>
+          </script>
+        </material>
+      </visual>
+      <gravity>0</gravity>
+      <velocity_decay>
+        <linear>0</linear>
+        <angular>0</angular>
+      </velocity_decay>
+    </link>
+    <joint name='rotor_2_joint' type='revolute'>
+      <child>rotor_2</child>
+      <parent>base_link</parent>
+      <axis>
+        <xyz> 0 0 1</xyz>
+        <limit>
+          <lower>-1e+16</lower>
+          <upper>1e+16</upper>
+        </limit>
+        <dynamics>
+          <damping>0</damping>
+          <spring_reference>0</spring_reference>
+          <spring_stiffness>0</spring_stiffness>
+        </dynamics>
+      </axis>
+    </joint>
+    <plugin filename="gz-sim-reversible-multicopter-motor-model-system" name="gz::sim::systems::ReversibleMulticopterMotorModel">
+      <jointName>rotor_2_joint</jointName>
+      <linkName>rotor_2</linkName>
+
+      <robotName>space_cobot_0</robotName>
+      <commandSubTopic>motor_command</commandSubTopic>
+
+      <a0ThrustConstant>2.123e-17 </a0ThrustConstant>
+      <a1ThrustConstant>2.598e-04 </a1ThrustConstant>
+      <a2ThrustConstant>0.0 </a2ThrustConstant>
+      <a3ThrustConstant>1.112e-10 </a3ThrustConstant>
+
+      <a0TorqueConstant>1.919e-19 </a0TorqueConstant>
+      <a1TorqueConstant>7.019e-06 </a1TorqueConstant>
+      <a2TorqueConstant>0.0 </a2TorqueConstant>
+      <a3TorqueConstant>-3.425e-12 </a3TorqueConstant>
+
+      <motorNumber>2</motorNumber>
+      <motorType>velocity</motorType>
+    </plugin>
+    <link name='rotor_5'>
+      <pose>-0.0827 -0.1433 0.0 0.0 0.610865 2.617993</pose>
+      <inertial>
+        <pose>0 0 0 0 -0 0</pose>
+        <mass>0.005</mass>
+        <inertia>
+          <ixx>9.75e-07</ixx>
+          <ixy>0</ixy>
+          <ixz>0</ixz>
+          <iyy>0.000273104</iyy>
+          <iyz>0</iyz>
+          <izz>0.000274004</izz>
+        </inertia>
+      </inertial>
+      <collision name='rotor_5_collision'>
+        <pose>0 0 0 0 -0 0</pose>
+        <geometry>
+          <cylinder>
+            <length>0.005</length>
+            <radius>0.064</radius>
+          </cylinder>
+        </geometry>
+        <surface>
+          <contact>
+            <ode/>
+          </contact>
+        </surface>
+      </collision>
+      <visual name='rotor_5_visual'>
+        <pose>0 0 0 0 -0 0</pose>
+        <geometry>
+          <mesh>
+            <scale>0.45 0.45 0.45</scale>
+            <uri>model://omnicopter/meshes/iris_prop_ccw.dae</uri>
+          </mesh>
+        </geometry>
+        <material>
+          <script>
+            <name>Gazebo/Yellow</name>
+            <uri>file://media/materials/scripts/gazebo.material</uri>
+          </script>
+        </material>
+      </visual>
+      <gravity>0</gravity>
+      <velocity_decay>
+        <linear>0</linear>
+        <angular>0</angular>
+      </velocity_decay>
+    </link>
+    <joint name='rotor_5_joint' type='revolute'>
+      <child>rotor_5</child>
+      <parent>base_link</parent>
+      <axis>
+        <xyz> 0 0 1</xyz>
+        <limit>
+          <lower>-1e+16</lower>
+          <upper>1e+16</upper>
+        </limit>
+        <dynamics>
+          <damping>0</damping>
+          <spring_reference>0</spring_reference>
+          <spring_stiffness>0</spring_stiffness>
+        </dynamics>
+      </axis>
+    </joint>
+    <plugin filename="gz-sim-reversible-multicopter-motor-model-system" name="gz::sim::systems::ReversibleMulticopterMotorModel">
+      <jointName>rotor_5_joint</jointName>
+      <linkName>rotor_5</linkName>
+
+      <robotName>space_cobot_0</robotName>
+      <commandSubTopic>motor_command</commandSubTopic>
+
+      <a0ThrustConstant>2.123e-17 </a0ThrustConstant>
+      <a1ThrustConstant>2.598e-04 </a1ThrustConstant>
+      <a2ThrustConstant>0.0 </a2ThrustConstant>
+      <a3ThrustConstant>1.112e-10 </a3ThrustConstant>
+
+      <a0TorqueConstant>-1.919e-19 </a0TorqueConstant>
+      <a1TorqueConstant>-7.019e-06 </a1TorqueConstant>
+      <a2TorqueConstant>0.0 </a2TorqueConstant>
+      <a3TorqueConstant>3.425e-12 </a3TorqueConstant>
+
+      <motorNumber>5</motorNumber>
+      <motorType>velocity</motorType>
+    </plugin>
+
+    <plugin filename="gz-sim-odometry-publisher-system" name="gz::sim::systems::OdometryPublisher">
+      <dimensions> 3 </dimensions>
+    </plugin>
+
+    <plugin name="gz::sim::systems::ForceTorque" filename="gz-sim-forcetorque-system">
+      <topic>/world/default/model/space_cobot/link/base_link/wrench</topic>
+      <update_rate>250</update_rate>
+    </plugin>
+
+
+  </model>
+</sdf>
